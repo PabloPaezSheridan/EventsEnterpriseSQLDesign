@@ -1,0 +1,19 @@
+LOCATION (NAME, address, city, capacity, rent_price, characteristics)
+ACTIVITY (NAME, type)
+MAKES(ARTIST_NAME, ACTIVITY_NAME, Cache)
+ARTIST (NAME, biography)
+EVENT (NAME, price, datetime, activity_name, location_name )
+PERFORM (EVENT_NAME, ARTIST_NAME)
+ATENDEE (FULLNAME, telephone, email, event_name)
+
+
+CONSIDERACIONES o CUESTIONES ABIERTAS (a validar con el cliente)
+
+Las relaciones entre las entidades Event, Activity y Artist podria haber sido
+una relacion ternaria pero decidi que no era lo mas conveniente por dos razones:
+
+1- Redundancia de datos: vamos a tener para cada evento que participe el artista en una misma actividad 
+    el cache asociado de manera repetitiva ya que el cache es el mismo para un artista en una actividad
+2- Rigidez y diseño poco practico: de haber una relacion ternaria estoy obligado a registrar un artista 
+    a un evento y una actividad si quiero registrar el cache cuando en relidad es logico que pueda tener
+    artistas cargados a una actividad y con un cache pero que aun no esten asociados a ningun evento.
