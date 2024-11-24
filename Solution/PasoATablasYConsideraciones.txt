@@ -1,0 +1,18 @@
+LOCATION (ID,NAME, address, city, capacity, rent_price, characteristics)
+ACTIVITY (ID, NAME, type, price)
+PERFORM(ARTIST_ID, ACTIVITY_ID, Cache)
+ARTIST (ID,NAME, biography)
+EVENT (ID,NAME, ticket_price, start_date, ACTIVITY_ID, LOCATION_ID)
+ATENDEE (ID,FULLNAME,EVENT_NAME, telephone, email)
+
+
+CONSIDERACIONES o CUESTIONES ABIERTAS
+
+-----------------------------------------------------------------------------------------------
+El costo de la actividad es un atributo que podria no estar almacenada en la base de datos ya que se puede calcular
+en base a el cache de los artistas para la actividad en cuestion. De hecho almacenarlo es de alguna manera redundante.
+Ya que el costo de un actividad se nos pide almacenar el approach que decidi adoptar es tener un atributo coste en la tabla
+de actividad y un par de triggers que actuen sobre la tabla intermedia entre artistas y actividad (PERFORM).
+Un trigger al insertar un artista a una actividad (en la tabla perform) sumando el cache del artista el coste de la actividad
+que actua como acumulador, y un trigger al remover un registro de la tabla decrementando el cache del artista a la actividad.
+Ambos triggers se encuentran tanto en el script para la generacion de la base como en la seccion de consultas.
