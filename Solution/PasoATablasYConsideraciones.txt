@@ -1,5 +1,5 @@
 LOCATION (ID,NAME, address, city, capacity, rent_price, characteristics)
-ACTIVITY (ID, NAME, type, price)
+ACTIVITY (ID, NAME, type, cost)
 PERFORM(ARTIST_ID, ACTIVITY_ID, Cache)
 ARTIST (ID,NAME, biography)
 EVENT (ID,NAME, ticket_price, start_date, ACTIVITY_ID, LOCATION_ID)
