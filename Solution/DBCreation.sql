@@ -73,10 +73,10 @@ FOR EACH ROW
 
 -- vista para mostrar todos los datos relacionados a un evento
 CREATE VIEW event_data AS
-SELECT e.name, e.start_date, e.ticket_price, act.name, a.type, l.name, l.street_address, l.capacity
+SELECT e.name Event_Name, e.start_date Event_Start_Date, e.ticket_price Event_Ticket_Price, a.name Activity_Name, a.type Activity_Type, l.name Location_Name, l.street_address Location_Address, l.capacity Location_Capacity
 FROM pablopaez.event e
-inner join pablopaez.activity act on act.id = e.event_id
-inner join pablopaez.location l on l.id = e.location_id 
+inner join pablopaez.activity a on a.id = e.id
+inner join pablopaez.location l on l.id = e.location_id ;
 
 
 -- Queries
@@ -84,18 +84,18 @@ inner join pablopaez.location l on l.id = e.location_id
 -- trae las ubicaciones ordenadas por el costo mas barato en relacion a la capacidad y el costo de alquiler
 select l.name, l.rent_price / l.capacity as location_cost_per_seat
 from location l
-order by location_cost_per_seat DESC
+order by location_cost_per_seat DESC;
 
 -- trae la informacion de los eventos futuros usando la vista de eventos
 select * from event_data
-where Event_Start_Date > NOW()
+where Event_Start_Date > NOW();
 
 -- trae los artistas con el numero de actuaciones de cada uno
 select a.full_name, COUNT(p.artist_id) as performings_numbers
 from artist a
 inner join perform p on p.artist_id = a.id
 group by a.id
-order by performings_numbers DESC
+order by performings_numbers DESC;
 
 -- trae las ubicaciones ordenadas por el numero de eventos
 select l.name,  COUNT(*) AS event_count from pablopaez.event e
@@ -106,13 +106,13 @@ order by event_count DESC;
 -- trae las fechas con mas eventos
 select e.start_date,COUNT(*) as event_count from pablopaez.event e
 group by e.start_date
-order by event_count
+order by event_count;
 
 -- trae los tipos de actividades ordenados por el numero de eventos asociados
 select a.type, COUNT(*) as event_count from pablopaez.activity a
 inner join pablopaez.event e on e.activity_id = a.id
 group by a.type
-order by event_count DESC
+order by event_count DESC;
 
 -- trae los tipos de actividades ordenados por la suma del numero de asistentes en todos los eventos
 select act.type, count(att.id) as attendes_per_activity_type
@@ -120,14 +120,14 @@ from pablopaez.activity act
 inner join pablopaez.event e on e.activity_id = act.id
 inner join pablopaez.attendee att on att.event_id = e.id
 group by act.type
-order by attendes_per_activity_type DESC
+order by attendes_per_activity_type DESC;
 
 -- traer los artistas que cobren mas barato en promedio
-select a.name, SUM(p.cache)/ COUNT(p.id) as average_cache, 
+select a.full_name, SUM(p.cache)/ COUNT(p.activity_id) as average_cache
 from pablopaez.artist a
 inner join perform p on p.activity_id = a.id
 group by a.id
-order by average_cache DESC
+order by average_cache DESC;
 
 -- trae los eventos y sus rentabilidades (ganancias como la suma de las entradas vendidas menos el costo de la actividad)
 select e.name, COUNT(att.id) * e.ticket_price - (act.cost + l.rent_price) as event_earning
@@ -136,7 +136,7 @@ inner join activity act on act.id = e.activity_id
 inner join attendee att on att.event_id = e.id
 inner join location l on l.id = e.location_id
 group by e.id
-order by event_earning DESC
+order by event_earning DESC;
 
 -- trae todo los futuros eventos con ubicacion disponible (que el numero de attendes sea menor a la capacity de la location)
 select e.name, l.capacity - SUM(a.id) as capacity_available
@@ -146,6 +146,5 @@ inner join pablopaez.attendee a on a.event_id = e.id
 where e.start_date > NOW()
 group by e.id
 having  capacity_available > 0
-order by capacity_available DESC
-
+order by capacity_available DESC;
 
